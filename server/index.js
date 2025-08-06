@@ -24,7 +24,7 @@ app.use(
    "https://mern-chat-app-n5dy.vercel.app",
   "https://mern-chat-app-n5dy-adit-bansals-projects.vercel.app",
   "https://mern-chat-app-n5dy-git-main-adit-bansals-projects.vercel.app",
-  "https://mern-chat-app-n5dy-prkjkgwdh-adit-bansals-projects.vercel.app",
+  "https://mern-chat-app-n5dy-prkjkgwdh-adit-bansals-projects.vercel.app"
    
 ],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
