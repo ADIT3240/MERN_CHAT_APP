@@ -15,13 +15,28 @@ export const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     if (userInfo) {
-      socket.current = io(SOCKET_HOST, {
+      const socketInstance = io(SOCKET_HOST, {
         withCredentials: true,
         query: { userId: userInfo.id },
+        transports: ['websocket', 'polling'],
+        upgrade: true,
+        secure: true,
+        rejectUnauthorized: false // Only for development
       });
-      socket.current.on("connect", () => {
+
+      socketInstance.on("connect", () => {
         console.log("Connected to socket server");
       });
+
+      socketInstance.on("connect_error", (err) => {
+        console.error("Socket connection error:", err);
+      });
+
+      socketInstance.on("disconnect", (reason) => {
+        console.log("Socket disconnected:", reason);
+      });
+
+      socket.current = socketInstance;
 
       const handleReceiveMessage = (message) => {
         // Access the latest state values
@@ -64,12 +79,29 @@ export const SocketProvider = ({ children }) => {
         addChannel(channel);
       };
 
-      socket.current.on("receiveMessage", handleReceiveMessage);
-      socket.current.on("recieve-channel-message", handleReceiveChannelMessage);
-      socket.current.on("new-channel-added", addNewChannel);
+      // Store references to the event handlers for cleanup
+      const receiveMessageHandler = (message) => handleReceiveMessage(message);
+      const receiveChannelMessageHandler = (message) => handleReceiveChannelMessage(message);
+      const newChannelHandler = (channel) => addNewChannel(channel);
 
+      // Add event listeners
+      socket.current.on("receiveMessage", receiveMessageHandler);
+      socket.current.on("recieve-channel-message", receiveChannelMessageHandler);
+      socket.current.on("new-channel-added", newChannelHandler);
+
+      // Cleanup function
       return () => {
-        socket.current.disconnect();
+        if (socket.current) {
+          // Remove all event listeners
+          socket.current.off("receiveMessage", receiveMessageHandler);
+          socket.current.off("recieve-channel-message", receiveChannelMessageHandler);
+          socket.current.off("new-channel-added", newChannelHandler);
+          
+          // Disconnect the socket
+          socket.current.disconnect();
+          socket.current = null;
+          console.log("Socket disconnected and cleaned up");
+        }
       };
     }
   }, [userInfo]);
