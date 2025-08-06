@@ -21,6 +21,11 @@ app.use(
   "http://localhost:5173",
   "http://localhost:5174",
   "http://localhost:5175"
+   "https://mern-chat-app-n5dy.vercel.app",
+  "https://mern-chat-app-n5dy-adit-bansals-projects.vercel.app",
+  "https://mern-chat-app-n5dy-git-main-adit-bansals-projects.vercel.app",
+  "https://mern-chat-app-n5dy-prkjkgwdh-adit-bansals-projects.vercel.app",
+   
 ],
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true,
