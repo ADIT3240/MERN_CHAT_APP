@@ -15,22 +15,23 @@ const app = express();
 const port = process.env.PORT;
 const databaseURL = process.env.DATABSE_URL;
 
-app.use(
-  cors({
-    origin: [
-  "http://localhost:5173",
-  "http://localhost:5174",
-  "http://localhost:5175"
-  "https://mern-chat-app-n5dy.vercel.app",
-  "https://mern-chat-app-n5dy-adit-bansals-projects.vercel.app",
-  "https://mern-chat-app-n5dy-git-main-adit-bansals-projects.vercel.app",
-  "https://mern-chat-app-n5dy-prkjkgwdh-adit-bansals-projects.vercel.app"
-   
-],
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    credentials: true,
-  })
-);
+// CORS configuration
+const corsOptions = {
+  origin: [
+    'http://localhost:5173',
+    'http://localhost:5174',
+    'http://localhost:5175',
+    'https://mern-chat-app-n5dy.vercel.app',
+    'https://mern-chat-app-n5dy-adit-bansals-projects.vercel.app',
+    'https://mern-chat-app-n5dy-git-main-adit-bansals-projects.vercel.app',
+    'https://mern-chat-app-n5dy-prkjkgwdh-adit-bansals-projects.vercel.app'
+  ],
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+  credentials: true,
+  optionsSuccessStatus: 200 // Some legacy browsers choke on 204
+};
+
+app.use(cors(corsOptions));
 
 app.use("/uploads/profiles", express.static("uploads/profiles"));
 app.use("/uploads/files", express.static("uploads/files"));
