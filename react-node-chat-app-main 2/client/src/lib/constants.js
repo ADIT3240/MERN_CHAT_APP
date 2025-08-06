@@ -1,5 +1,7 @@
 export const HOST = import.meta.env.VITE_SERVER_URL;
-export const SOCKET_HOST = import.meta.env.VITE_SERVER_URL;
+const wsProtocol = import.meta.env.VITE_SERVER_URL?.startsWith('https') ? 'wss://' : 'ws://';
+const wsHost = import.meta.env.VITE_SOCKET_URL || import.meta.env.VITE_SERVER_URL?.replace(/^https?:\/\//, '');
+export const SOCKET_HOST = wsHost ? `${wsProtocol}${wsHost.replace(/^https?:\/\//, '')}` : '';
 
 export const AUTH_ROUTES = "api/auth";
 export const LOGIN_ROUTE = `${AUTH_ROUTES}/login`;
